@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan: Bagus Ikram, S.Pd & Ayu Vita Tri Rezeki, S.Pd, Gr.</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        skyTheme: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e'
+                        },
+                        accentGold: {
+                            100: '#fef3c7',
+                            300: '#fcd34d',
+                            500: '#d97706',
+                            600: '#b45309'
+                        },
+                        creamWhite: '#FAFBFD'
+                    },
+                    fontFamily: {
+                        cursive: ['"Alex Brush"', 'cursive'],
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        arabic: ['"Amiri"', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1.5deg); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(14, 165, 233, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(14, 165, 233, 0.6); }
+        }
+        .animate-float {
+            animation: float 5s ease-in-out infinite;
+        }
+        .animate-pulse-glow {
+            animation: pulseGlow 3s infinite;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0f9ff;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #38bdf8;
+            border-radius: 3px;
+        }
+
+        #petalCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 40;
+        }
+
+        .tab-btn.active {
+            color: #0284c7;
+            border-bottom: 2.5px solid #0284c7;
+            font-weight: 700;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-gray-800 font-sans antialiased selection:bg-skyTheme-200 selection:text-skyTheme-900">
+
+    <!-- Dynamic Falling Petals Canvas -->
+    <canvas id="petalCanvas"></canvas>
+
+    <!-- Floating Audio Control Button -->
+    <div id="audioControl" class="fixed top-5 right-5 z-50 hidden">
+        <button onclick="toggleAudio()" id="btnAudio" title="Putar / Hentikan Musik" class="w-12 h-12 rounded-full bg-white/95 backdrop-blur-md shadow-xl border border-skyTheme-300 flex items-center justify-center text-skyTheme-600 hover:scale-110 active:scale-95 transition-all duration-300">
+            <i id="audioIcon" class="fas fa-music animate-spin" style="animation-duration: 4s;"></i>
+        </button>
+    </div>
+
+    <!-- Cover Envelope Modal -->
+    <div id="coverModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/90 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px] p-4 transition-opacity duration-700">
+        <div class="max-w-md w-full p-8 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-skyTheme-200 text-center relative overflow-hidden animate-float">
+            
+            <div class="text-skyTheme-500 mb-2">
+                <i class="fas fa-heart text-3xl opacity-80 animate-pulse"></i>
+            </div>
+
+            <p class="text-skyTheme-700 uppercase tracking-widest text-xs font-semibold mb-1">Walimatul 'Ursy</p>
+            <h1 class="font-serif text-3xl md:text-4xl font-bold text-slate-800 mb-1">Bagus &amp; Ayu</h1>
+            <p class="text-xs text-skyTheme-600 font-medium italic mb-6">Minggu, 30 Mei 2027</p>
+
+            <!-- Recipient Greeting Box -->
+            <div class="my-6 py-4 px-4 bg-skyTheme-50/80 rounded-2xl border border-skyTheme-200 shadow-inner">
+                <p class="text-xs text-slate-600 mb-1">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+                <p id="guestName" class="font-serif text-xl font-bold text-skyTheme-900 capitalize">Bapak dan Ibu</p>
+                <p class="text-[10px] text-slate-400 mt-1">*Mohon maaf bila ada kesalahan penulisan nama / gelar</p>
+            </div>
+
+            <p class="text-xs text-slate-600 mb-6 leading-relaxed">
+                Tanpa mengurangi rasa hormat, kami mengundang Anda untuk hadir dan memberikan doa restu pada kebahagiaan pernikahan kami.
+            </p>
+
+            <button onclick="openInvitation()" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-skyTheme-500 via-skyTheme-600 to-skyTheme-700 text-white font-medium text-sm shadow-lg hover:shadow-2xl hover:brightness-110 active:scale-98 transition-all duration-300 flex items-center justify-center gap-2 group animate-pulse-glow">
+                <i class="fas fa-envelope-open text-base transition-transform group-hover:-translate-y-0.5"></i>
+                Buka Undangan
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Envelope -->
+    <main id="mainContent" class="max-w-md mx-auto bg-white min-h-screen shadow-2xl relative pb-24 opacity-0 transition-opacity duration-1000 border-x border-skyTheme-100">
+
+        <!-- Header Navigation Bar -->
+        <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-skyTheme-100 px-4 py-3 flex items-center justify-between shadow-xs">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-graduation-cap text-skyTheme-600 text-sm"></i>
+                <span class="font-serif font-bold text-slate-800 text-sm">Bagus &amp; Ayu</span>
+            </div>
+            <div class="text-[11px] font-semibold text-skyTheme-700 bg-skyTheme-50 px-2.5 py-1 rounded-full border border-skyTheme-200">
+                30 Mei 2027
+            </div>
+        </header>
+
+        <!-- Tab Navigation Header -->
+        <div class="bg-slate-50 border-b border-skyTheme-100 px-2 flex justify-around text-xs text-slate-600 overflow-x-auto scrollbar-none sticky top-[49px] z-20">
+            <button onclick="switchTab('beranda')" id="tab-beranda" class="tab-btn active py-2.5 px-3 whitespace-nowrap flex items-center gap-1.5 transition-colors">
+                <i class="fas fa-home"></i> Beranda
+            </button>
+            <button onclick="switchTab('mempelai')" id="tab-mempelai" class="tab-btn py-2.5 px-3 whitespace-nowrap flex items-center gap-1.5 transition-colors">
+                <i class="fas fa-user-friends"></i> Mempelai
+            </button>
+            <button onclick="switchTab('acara')" id="tab-acara" class="tab-btn py-2.5 px-3 whitespace-nowrap flex items-center gap-1.5 transition-colors">
+                <i class="fas fa-calendar-day"></i> Acara
+            </button>
+            <button onclick="switchTab('info')" id="tab-info" class="tab-btn py-2.5 px-3 whitespace-nowrap flex items-center gap-1.5 transition-colors">
+                <i class="fas fa-user-tie"></i> Busana
+            </button>
+            <button onclick="switchTab('hadiah')" id="tab-hadiah" class="tab-btn py-2.5 px-3 whitespace-nowrap flex items-center gap-1.5 transition-colors">
+                <i class="fas fa-gift"></i> Hadiah
+            </button>
+        </div>
+
+        <!-- PAGE 1: BERANDA -->
+        <section id="page-beranda" class="page-content block">
+            <div class="p-6 text-center bg-gradient-to-b from-skyTheme-50/60 via-white to-skyTheme-50/30 relative overflow-hidden">
+                <!-- Islamic Arabic Greeting -->
+                <div class="my-4">
+                    <p class="font-arabic text-2xl text-skyTheme-800 leading-loose" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+                    <p class="text-xs text-slate-500 italic mt-1">"Dengan menyebut nama Allah Yang Maha Pengasih lagi Maha Penyayang"</p>
+                </div>
+
+                <div class="my-6">
+                    <span class="inline-block px-3.5 py-1 bg-skyTheme-100 text-skyTheme-800 rounded-full text-xs font-semibold tracking-widest uppercase border border-skyTheme-200 shadow-xs">
+                        Undangan Pernikahan
+                    </span>
+                    <p class="text-xs text-slate-600 mt-2">Assalamu'alaikum Warahmatullahi Wabarakatuh</p>
+                </div>
+
+                <!-- Portrait Visual Badge -->
+                <div class="my-8 relative inline-block">
+                    <div class="w-48 h-48 mx-auto rounded-full p-1.5 bg-gradient-to-tr from-skyTheme-500 via-skyTheme-200 to-skyTheme-600 shadow-xl overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Bagus dan Ayu" class="w-full h-full object-cover rounded-full filter contrast-105" onerror="this.src='https://placehold.co/400x400/38bdf8/ffffff?text=Bagus+%26+Ayu'">
+                    </div>
+                    <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-white px-4 py-1 rounded-full shadow-md border border-skyTheme-200 text-skyTheme-700 text-xs font-serif font-semibold italic">
+                        Pendidik &amp; Guru
+                    </div>
+                </div>
+
+                <h2 class="font-serif text-3xl font-bold text-slate-800 leading-tight">
+                    Bagus Ikram, S.Pd <br>
+                    <span class="font-cursive text-4xl text-skyTheme-600 font-normal">&amp;</span> <br>
+                    Ayu Vita Tri Rezeki, S.Pd, Gr.
+                </h2>
+                <p class="text-xs text-slate-500 mt-3 font-semibold">Minggu, 30 Mei 2027</p>
+
+                <!-- Live Countdown Clock Box -->
+                <div class="mt-8 bg-white/95 backdrop-blur border border-skyTheme-200 rounded-2xl p-5 shadow-lg">
+                    <p class="text-xs text-skyTheme-800 font-bold mb-3 uppercase tracking-wider">Menuju Hari Bahagia</p>
+                    <div class="grid grid-cols-4 gap-2 text-center" id="countdown">
+                        <div class="p-2.5 bg-skyTheme-50/80 rounded-xl border border-skyTheme-100">
+                            <span id="cd-days" class="block font-serif font-bold text-xl text-slate-800">00</span>
+                            <span class="text-[10px] text-slate-500 uppercase font-medium">Hari</span>
+                        </div>
+                        <div class="p-2.5 bg-skyTheme-50/80 rounded-xl border border-skyTheme-100">
+                            <span id="cd-hours" class="block font-serif font-bold text-xl text-slate-800">00</span>
+                            <span class="text-[10px] text-slate-500 uppercase font-medium">Jam</span>
+                        </div>
+                        <div class="p-2.5 bg-skyTheme-50/80 rounded-xl border border-skyTheme-100">
+                            <span id="cd-minutes" class="block font-serif font-bold text-xl text-slate-800">00</span>
+                            <span class="text-[10px] text-slate-500 uppercase font-medium">Menit</span>
+                        </div>
+                        <div class="p-2.5 bg-skyTheme-50/80 rounded-xl border border-skyTheme-100">
+                            <span id="cd-seconds" class="block font-serif font-bold text-xl text-slate-800">00</span>
+                            <span class="text-[10px] text-slate-500 uppercase font-medium">Detik</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quran Verse Card -->
+                <div class="mt-8 p-5 bg-skyTheme-50/60 rounded-2xl border border-skyTheme-100 text-center">
+                    <i class="fas fa-quote-left text-skyTheme-400 text-xl mb-2"></i>
+                    <p class="text-xs text-slate-700 italic leading-relaxed mb-3">
+                        "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang."
+                    </p>
+                    <p class="text-xs font-bold text-skyTheme-800">(QS. Ar-Rum: 21)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: MEMPELAI -->
+        <section id="page-mempelai" class="page-content hidden p-6 bg-white">
+            <div class="text-center mb-8">
+                <span class="text-xs text-skyTheme-600 font-semibold tracking-widest uppercase">Mempelai Pria &amp; Wanita</span>
+                <h3 class="font-serif text-2xl font-bold text-slate-800 mt-1">Pasangan Berbahagia</h3>
+                <div class="w-12 h-0.5 bg-skyTheme-400 mx-auto mt-2"></div>
+            </div>
+
+            <!-- Groom Profile Card -->
+            <div class="p-6 rounded-2xl bg-gradient-to-b from-skyTheme-50/50 to-white border border-skyTheme-100 shadow-sm text-center mb-8 relative">
+                <div class="w-32 h-32 mx-auto rounded-full p-1 bg-gradient-to-tr from-skyTheme-500 to-skyTheme-200 shadow-md mb-4 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" alt="Bagus Ikram, S.Pd" class="w-full h-full object-cover rounded-full" onerror="this.src='https://placehold.co/300x300/e0f2fe/0369a1?text=Bagus+Ikram'">
+                </div>
+                
+                <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-skyTheme-100 text-skyTheme-800 text-[11px] font-semibold mb-2">
+                    <i class="fas fa-chalkboard-teacher"></i> Pendidik / Guru (S.Pd)
+                </div>
+
+                <h4 class="font-serif text-2xl font-bold text-slate-800">Bagus Ikram, S.Pd</h4>
+                <p class="text-xs text-skyTheme-600 font-semibold my-1">Mempelai Pria</p>
+                <p class="text-xs text-slate-600 leading-relaxed mt-2">
+                    Putra Tercinta dari Keluarga <br>
+                    <strong class="text-slate-800">Bapak H. Sukardi</strong> &amp; <strong class="text-slate-800">Ibu Hj. Aminah</strong>
+                </p>
+
+                <div class="mt-4 p-3 bg-white rounded-xl border border-slate-200 text-left">
+                    <div class="flex items-start gap-2 text-xs text-slate-600">
+                        <i class="fas fa-map-marker-alt text-skyTheme-600 mt-0.5"></i>
+                        <div>
+                            <span class="font-semibold text-slate-800 block">Asal Mempelai Pria:</span>
+                            Desa Tegal Sari, Kec. Plered, Kab. Cirebon
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Heart Separator -->
+            <div class="text-center my-6">
+                <span class="w-12 h-12 rounded-full bg-gradient-to-r from-skyTheme-500 to-skyTheme-600 text-white inline-flex items-center justify-center font-cursive text-3xl shadow-lg">&amp;</span>
+            </div>
+
+            <!-- Bride Profile Card -->
+            <div class="p-6 rounded-2xl bg-gradient-to-b from-skyTheme-50/50 to-white border border-skyTheme-100 shadow-sm text-center relative">
+                <div class="w-32 h-32 mx-auto rounded-full p-1 bg-gradient-to-tr from-skyTheme-500 to-skyTheme-200 shadow-md mb-4 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" alt="Ayu Vita Tri Rezeki, S.Pd, Gr." class="w-full h-full object-cover rounded-full" onerror="this.src='https://placehold.co/300x300/e0f2fe/0369a1?text=Ayu+Vita'">
+                </div>
+
+                <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-semibold mb-2">
+                    <i class="fas fa-user-graduate"></i> Guru Profesional (S.Pd, Gr.)
+                </div>
+
+                <h4 class="font-serif text-2xl font-bold text-slate-800">Ayu Vita Tri Rezeki, S.Pd, Gr.</h4>
+                <p class="text-xs text-skyTheme-600 font-semibold my-1">Mempelai Wanita</p>
+                <p class="text-xs text-slate-600 leading-relaxed mt-2">
+                    Putri Tercinta dari Keluarga <br>
+                    <strong class="text-slate-800">Bapak H. Mansur</strong> &amp; <strong class="text-slate-800">Ibu Hj. Sri Rahayu</strong>
+                </p>
+
+                <div class="mt-4 p-3 bg-white rounded-xl border border-slate-200 text-left">
+                    <div class="flex items-start gap-2 text-xs text-slate-600">
+                        <i class="fas fa-map-marker-alt text-skyTheme-600 mt-0.5"></i>
+                        <div>
+                            <span class="font-semibold text-slate-800 block">Asal Mempelai Wanita:</span>
+                            Desa Tegalwangi, Kec. Weru, Kab. Cirebon
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 3: ACARA -->
+        <section id="page-acara" class="page-content hidden p-6 bg-slate-50/50">
+            <div class="text-center mb-8">
+                <span class="text-xs text-skyTheme-600 font-semibold tracking-widest uppercase">Waktu &amp; Lokasi</span>
+                <h3 class="font-serif text-2xl font-bold text-slate-800 mt-1">Rangkaian Acara</h3>
+                <div class="w-12 h-0.5 bg-skyTheme-400 mx-auto mt-2"></div>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Akad Nikah Card -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-skyTheme-100 text-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-skyTheme-500 text-white text-[10px] px-3 py-1 rounded-bl-xl font-semibold uppercase tracking-wider">
+                        Akad Nikah
+                    </div>
+                    <i class="fas fa-mosque text-3xl text-skyTheme-600 my-2"></i>
+                    <h4 class="font-serif text-xl font-bold text-slate-800">Akad Nikah</h4>
+                    <p class="text-xs text-slate-600 mt-2 font-medium"><i class="far fa-calendar-alt text-skyTheme-600 mr-1.5"></i>Minggu, 30 Mei 2027</p>
+                    <p class="text-xs text-slate-600 mt-1"><i class="far fa-clock text-skyTheme-600 mr-1.5"></i>Pukul 08.00 - 10.00 WIB</p>
+                    <p class="text-xs text-slate-500 mt-3 pt-3 border-t border-slate-100">
+                        Lokasi: Kediaman Mempelai Wanita
+                    </p>
+                </div>
+
+                <!-- Resepsi Card -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-skyTheme-100 text-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-skyTheme-700 text-white text-[10px] px-3 py-1 rounded-bl-xl font-semibold uppercase tracking-wider">
+                        Resepsi
+                    </div>
+                    <i class="fas fa-glass-cheers text-3xl text-skyTheme-600 my-2"></i>
+                    <h4 class="font-serif text-xl font-bold text-slate-800">Resepsi Pernikahan</h4>
+                    <p class="text-xs text-slate-600 mt-2 font-medium"><i class="far fa-calendar-alt text-skyTheme-600 mr-1.5"></i>Minggu, 30 Mei 2027</p>
+                    <p class="text-xs text-slate-600 mt-1"><i class="far fa-clock text-skyTheme-600 mr-1.5"></i>Pukul 10.30 WIB - Selesai</p>
+                    <p class="text-xs text-slate-500 mt-3 pt-3 border-t border-slate-100">
+                        Lokasi: Kediaman Mempelai Wanita
+                    </p>
+                </div>
+
+                <!-- Venue Detail Box -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-skyTheme-200 text-center">
+                    <i class="fas fa-map-marked-alt text-3xl text-skyTheme-600 mb-2"></i>
+                    <h4 class="font-serif text-xl font-bold text-slate-800 mb-1">Lokasi Utama Acara</h4>
+                    <div class="p-3 bg-skyTheme-50 rounded-xl border border-skyTheme-200 my-3">
+                        <p class="text-xs font-bold text-skyTheme-900 mb-1">Blok Kedung Belik</p>
+                        <p class="text-xs text-slate-700 leading-relaxed">
+                            RT 027 RW 007, Desa Tegalwangi, <br>
+                            Kecamatan Weru, Kabupaten Cirebon
+                        </p>
+                    </div>
+
+                    <!-- Map Buttons -->
+                    <a href="https://maps.google.com/?q=Blok+Kedung+Belik+Tegalwangi+Weru+Cirebon" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-skyTheme-600 hover:bg-skyTheme-700 text-white text-xs font-semibold shadow-md transition-all active:scale-98">
+                        <i class="fas fa-directions"></i> Petunjuk Arah Google Maps
+                    </a>
+
+                    <button onclick="addToCalendar()" class="inline-flex items-center justify-center gap-2 w-full mt-2.5 py-2.5 px-4 rounded-xl border border-skyTheme-300 text-skyTheme-800 hover:bg-skyTheme-50 text-xs font-semibold transition-all">
+                        <i class="far fa-calendar-plus text-skyTheme-600"></i> Simpan Tanggal ke Kalender
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: BUSANA & TATA TERTIB -->
+        <section id="page-info" class="page-content hidden p-6 bg-white">
+            <div class="text-center mb-8">
+                <span class="text-xs text-skyTheme-600 font-semibold tracking-widest uppercase">Panduan Tamu Undangan</span>
+                <h3 class="font-serif text-2xl font-bold text-slate-800 mt-1">Busana &amp; Etika</h3>
+                <div class="w-12 h-0.5 bg-skyTheme-400 mx-auto mt-2"></div>
+            </div>
+
+            <!-- Dress Code Recommendations -->
+            <div class="space-y-4">
+                <div class="p-5 rounded-2xl bg-skyTheme-50/60 border border-skyTheme-200 flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-full bg-skyTheme-100 flex items-center justify-center text-skyTheme-700 shrink-0 text-xl">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-serif font-bold text-slate-800 text-sm">Pria / Bapak-bapak</h4>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                            Disarankan berbusana Muslim rapi, Baju Koko, Kemeja Batik, atau Seragam Dinas Pendidik/Guru yang santun.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-skyTheme-50/60 border border-skyTheme-200 flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-full bg-skyTheme-100 flex items-center justify-center text-skyTheme-700 shrink-0 text-xl">
+                        <i class="fas fa-female"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-serif font-bold text-slate-800 text-sm">Wanita / Ibu-ibu</h4>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                            Disarankan berbusana Muslimah, Gamis, Busana Batik Santun, atau seragam profesi guru yang menutupi aurat.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Color Palette Suggestion -->
+                <div class="p-5 rounded-2xl border border-slate-200 text-center">
+                    <p class="text-xs font-semibold text-slate-700 mb-3">Rekomendasi Warna Busana (Dresscode):</p>
+                    <div class="flex justify-center items-center gap-4">
+                        <div class="flex flex-col items-center">
+                            <span class="w-8 h-8 rounded-full bg-skyTheme-100 border border-skyTheme-300 shadow-sm"></span>
+                            <span class="text-[10px] text-slate-600 mt-1">Biru Muda</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <span class="w-8 h-8 rounded-full bg-white border border-slate-300 shadow-sm"></span>
+                            <span class="text-[10px] text-slate-600 mt-1">Putih</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <span class="w-8 h-8 rounded-full bg-skyTheme-700 shadow-sm"></span>
+                            <span class="text-[10px] text-slate-600 mt-1">Biru Tua</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <span class="w-8 h-8 rounded-full bg-slate-100 border border-slate-300 shadow-sm"></span>
+                            <span class="text-[10px] text-slate-600 mt-1">Pastel</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Educator / Islamic Note -->
+                <div class="p-4 bg-skyTheme-50 rounded-2xl border border-skyTheme-200 text-center">
+                    <i class="fas fa-graduation-cap text-skyTheme-600 text-lg mb-1"></i>
+                    <p class="text-xs text-skyTheme-900 font-medium leading-relaxed">
+                        Merupakan suatu kehormatan dan kebahagiaan bagi kami serta keluarga besar rekan-rekan pendidik/guru apabila Bapak/Ibu/Saudara/i berkenan hadir dan mendoakan kami.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 5: HADIAH & AMPLOP DIGITAL -->
+        <section id="page-hadiah" class="page-content hidden p-6 bg-slate-50/30">
+            <div class="text-center mb-8">
+                <span class="text-xs text-skyTheme-600 font-semibold tracking-widest uppercase">Tanda Kasih</span>
+                <h3 class="font-serif text-2xl font-bold text-slate-800 mt-1">Amplop Digital &amp; Kado</h3>
+                <div class="w-12 h-0.5 bg-skyTheme-400 mx-auto mt-2"></div>
+                <p class="text-xs text-slate-600 mt-3 leading-relaxed">
+                    Doa restu Anda merupakan karunia terindah bagi kami. Namun jika ingin memberikan tanda kasih berupa kado digital, Anda dapat menggunakan rekening di bawah ini:
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Groom Bank Card -->
+                <div class="bg-gradient-to-br from-slate-900 via-skyTheme-900 to-slate-900 text-white p-5 rounded-2xl shadow-xl border border-skyTheme-400/40 relative overflow-hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="font-bold tracking-wider text-skyTheme-200 text-sm">BANK BCA</span>
+                        <i class="fas fa-credit-card text-skyTheme-300 text-xl"></i>
+                    </div>
+                    <p class="text-[11px] text-slate-300">Nomor Rekening:</p>
+                    <div class="flex items-center justify-between mt-1">
+                        <span class="font-mono text-lg tracking-widest font-bold text-skyTheme-100" id="rek1">8220912345</span>
+                        <button onclick="copyToClipboard('rek1')" class="px-3 py-1.5 bg-skyTheme-500 hover:bg-skyTheme-600 text-white text-[11px] font-semibold rounded-lg transition-all flex items-center gap-1 active:scale-95">
+                            <i class="far fa-copy"></i> Salin
+                        </button>
+                    </div>
+                    <p class="text-xs text-slate-300 mt-3">a.n Bagus Ikram</p>
+                </div>
+
+                <!-- Bride Bank Card -->
+                <div class="bg-gradient-to-br from-skyTheme-800 via-skyTheme-900 to-slate-900 text-white p-5 rounded-2xl shadow-xl border border-skyTheme-300/40 relative overflow-hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="font-bold tracking-wider text-skyTheme-100 text-sm">BANK MANDIRI</span>
+                        <i class="fas fa-university text-skyTheme-200 text-xl"></i>
+                    </div>
+                    <p class="text-[11px] text-skyTheme-200">Nomor Rekening:</p>
+                    <div class="flex items-center justify-between mt-1">
+                        <span class="font-mono text-lg tracking-widest font-bold text-white" id="rek2">1370019876543</span>
+                        <button onclick="copyToClipboard('rek2')" class="px-3 py-1.5 bg-skyTheme-600 hover:bg-skyTheme-700 text-white text-[11px] font-semibold rounded-lg transition-all flex items-center gap-1 active:scale-95">
+                            <i class="far fa-copy"></i> Salin
+                        </button>
+                    </div>
+                    <p class="text-xs text-skyTheme-200 mt-3">a.n Ayu Vita Tri Rezeki</p>
+                </div>
+
+                <!-- Physical Gift Address Box -->
+                <div class="p-5 bg-white rounded-2xl border border-skyTheme-200 text-center shadow-xs">
+                    <i class="fas fa-box-open text-skyTheme-600 text-2xl mb-2"></i>
+                    <h4 class="font-serif font-bold text-slate-800 text-sm">Kirim Hadiah Fisik</h4>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                        Alamat Pengiriman Kado/Hadiah: <br>
+                        <strong class="text-slate-800">Kediaman Mempelai Wanita (Ayu Vita)</strong> <br>
+                        Blok Kedung Belik, RT 027 RW 007, Desa Tegalwangi, Kec. Weru, Kab. Cirebon
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SHARED SECTION: GALERI & LOVE STORY -->
+        <section class="p-6 bg-white border-t border-skyTheme-100">
+            <div class="text-center mb-8">
+                <span class="text-xs text-skyTheme-600 font-semibold tracking-widest uppercase">Momen Bahagia</span>
+                <h3 class="font-serif text-2xl font-bold text-slate-800 mt-1">Galeri Foto</h3>
+                <div class="w-12 h-0.5 bg-skyTheme-400 mx-auto mt-2"></div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div class="overflow-hidden rounded-2xl border border-skyTheme-200 group cursor-pointer shadow-xs" onclick="openLightbox('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80')">
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=400&q=80" alt="Galeri 1" class="w-full h-36 object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/38bdf8/ffffff?text=Galeri+1'">
+                </div>
+                <div class="overflow-hidden rounded-2xl border border-skyTheme-200 group cursor-pointer shadow-xs" onclick="openLightbox('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80')">
+                    <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=400&q=80" alt="Galeri 2" class="w-full h-36 object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/38bdf8/ffffff?text=Galeri+2'">
+                </div>
+                <div class="overflow-hidden rounded-2xl border border-skyTheme-200 group cursor-pointer shadow-xs" onclick="openLightbox('https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80')">
+                    <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80" alt="Galeri 3" class="w-full h-36 object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/38bdf8/ffffff?text=Galeri+3'">
+                </div>
+                <div class="overflow-hidden rounded-2xl border border-skyTheme-200 group cursor-pointer shadow-xs" onclick="openLightbox('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80')">
+                    <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=400&q=80" alt="Galeri 4" class="w-full h-36 object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/38bdf8/ffffff?text=Galeri+4'">
+                </div>
+            </div>
+
+            <!-- Love Story Timeline -->
+            <div class="mt-10 pt-6 border-t border-skyTheme-100">
+                <h4 class="font-serif text-xl font-bold text-center text-slate-800 mb-6">Kisah Kasih Kami</h4>
+                <div class="space-y-4 relative before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-skyTheme-200">
+                    <div class="relative pl-8 text-left">
+                        <div class="absolute left-1.5 top-1.5 w-4 h-4 rounded-full bg-skyTheme-500 ring-4 ring-skyTheme-100"></div>
+                        <span class="text-[10px] font-bold text-skyTheme-700 uppercase tracking-wider">Tahun 2023</span>
+                        <h5 class="font-bold text-xs text-slate-800">Pertemuan Awal</h5>
+                        <p class="text-xs text-slate-600 mt-0.5">Pertama kali saling mengenal dalam kegiatan pengembangan kompetensi pendidik di Cirebon.</p>
+                    </div>
+                    <div class="relative pl-8 text-left">
+                        <div class="absolute left-1.5 top-1.5 w-4 h-4 rounded-full bg-skyTheme-500 ring-4 ring-skyTheme-100"></div>
+                        <span class="text-[10px] font-bold text-skyTheme-700 uppercase tracking-wider">Awal 2027</span>
+                        <h5 class="font-bold text-xs text-slate-800">Khitbah / Lamaran</h5>
+                        <p class="text-xs text-slate-600 mt-0.5">Niat suci diikat dalam pertemuan silaturahmi keluarga besar kedua belah pihak.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SHARED SECTION: RSVP & UCAPAN -->
+        <section class="p-6 bg-skyTheme-50/40 border-t border-skyTheme-100">
+            <div class="text-center mb-6">
+                <span class="text-xs text-skyTheme-600 font-semibold tracking-widest uppercase">Konfirmasi Kehadiran</span>
+                <h3 class="font-serif text-2xl font-bold text-slate-800 mt-1">RSVP &amp; Doa Restu</h3>
+                <div class="w-12 h-0.5 bg-skyTheme-400 mx-auto mt-2"></div>
+            </div>
+
+            <form id="rsvpForm" onsubmit="submitRSVP(event)" class="bg-white p-5 rounded-2xl border border-skyTheme-200 shadow-xs space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Lengkap</label>
+                    <input type="text" id="rsvpName" required placeholder="Contoh: Bapak Ahmad / Ibu Maria" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-skyTheme-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Konfirmasi Kehadiran</label>
+                    <select id="rsvpStatus" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-skyTheme-500 bg-white">
+                        <option value="Hadir">InsyaAllah Hadir</option>
+                        <option value="Ragu">Masih Ragu-ragu</option>
+                        <option value="Tidak Hadir">Maaf, Halangan/Tidak Hadir</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Jumlah Tamu</label>
+                    <select id="rsvpGuests" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-skyTheme-500 bg-white">
+                        <option value="1 Orang">1 Orang</option>
+                        <option value="2 Orang">2 Orang</option>
+                        <option value="3+ Orang">Lebih dari 2 Orang</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Pesan &amp; Doa Restu</label>
+                    <textarea id="rsvpMessage" rows="3" required placeholder="Tuliskan ucapan dan doa terbaik untuk kedua mempelai..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-skyTheme-500 resize-none"></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-skyTheme-500 to-skyTheme-600 hover:from-skyTheme-600 hover:to-skyTheme-700 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 active:scale-98">
+                    <i class="fas fa-paper-plane"></i> Kirim Konfirmasi &amp; Ucapan
+                </button>
+            </form>
+
+            <div class="mt-8 space-y-3" id="wishesList">
+                <p class="text-xs font-semibold text-slate-700 mb-2">Ucapan &amp; Doa Tamu Undangan:</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="p-8 text-center bg-slate-900 text-white text-xs border-t border-skyTheme-600/40">
+            <h4 class="font-serif text-2xl text-skyTheme-300 mb-1">Bagus &amp; Ayu</h4>
+            <p class="text-slate-400 mb-4 text-[11px]">Terima kasih atas doa &amp; restu Bapak/Ibu/Saudara/i sekalian.</p>
+            <p class="text-[10px] text-slate-500">
+                Pernikahan Bagus Ikram, S.Pd &amp; Ayu Vita Tri Rezeki, S.Pd, Gr. <br>
+                Cirebon, Jawa Barat
+            </p>
+        </footer>
+
+    </main>
+
+    <!-- Bottom Navigation Bar (Mobile Friendly) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-skyTheme-200 shadow-2xl">
+        <div class="max-w-md mx-auto flex justify-around items-center py-2 px-1 text-center">
+            <button onclick="switchTab('beranda')" class="flex flex-col items-center p-1.5 text-slate-500 hover:text-skyTheme-600 transition-colors">
+                <i class="fas fa-home text-base mb-0.5"></i>
+                <span class="text-[10px] font-medium">Beranda</span>
+            </button>
+            <button onclick="switchTab('mempelai')" class="flex flex-col items-center p-1.5 text-slate-500 hover:text-skyTheme-600 transition-colors">
+                <i class="fas fa-heart text-base mb-0.5"></i>
+                <span class="text-[10px] font-medium">Mempelai</span>
+            </button>
+            <button onclick="switchTab('acara')" class="flex flex-col items-center p-1.5 text-slate-500 hover:text-skyTheme-600 transition-colors">
+                <i class="fas fa-calendar-alt text-base mb-0.5"></i>
+                <span class="text-[10px] font-medium">Acara</span>
+            </button>
+            <button onclick="switchTab('info')" class="flex flex-col items-center p-1.5 text-slate-500 hover:text-skyTheme-600 transition-colors">
+                <i class="fas fa-tshirt text-base mb-0.5"></i>
+                <span class="text-[10px] font-medium">Busana</span>
+            </button>
+            <button onclick="switchTab('hadiah')" class="flex flex-col items-center p-1.5 text-slate-500 hover:text-skyTheme-600 transition-colors">
+                <i class="fas fa-gift text-base mb-0.5"></i>
+                <span class="text-[10px] font-medium">Hadiah</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 z-50 bg-slate-950/90 hidden items-center justify-center p-4 cursor-pointer" onclick="closeLightbox()">
+        <img id="lightboxImg" src="" alt="Foto" class="max-w-full max-h-[85vh] rounded-2xl shadow-2xl object-contain">
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-skyTheme-200 border border-skyTheme-500/40 px-5 py-2.5 rounded-full text-xs shadow-2xl opacity-0 transition-opacity duration-300 pointer-events-none">
+        Teks berhasil disalin!
+    </div>
+
+    <script>
+        let isAudioPlaying = false;
+        let audioCtx = null;
+        let melodyInterval = null;
+
+        /* Tab Navigation Switcher */
+        function switchTab(tabName) {
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(p => p.classList.add('hidden'));
+
+            const selectedPage = document.getElementById('page-' + tabName);
+            if (selectedPage) {
+                selectedPage.classList.remove('hidden');
+            }
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+
+            const activeBtn = document.getElementById('tab-' + tabName);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* Read URL Query parameter ?kpd=Nama%20Tamu */
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const guestParam = urlParams.get('kpd');
+            if (guestParam) {
+                const decoded = decodeURIComponent(guestParam);
+                document.getElementById('guestName').innerText = decoded;
+                const rsvpInput = document.getElementById('rsvpName');
+                if (rsvpInput) rsvpInput.value = decoded;
+            }
+            startCountdown();
+            loadWishes();
+            initPetalsCanvas();
+        });
+
+        /* Open Envelope Cover */
+        function openInvitation() {
+            const coverModal = document.getElementById('coverModal');
+            const mainContent = document.getElementById('mainContent');
+            const audioControl = document.getElementById('audioControl');
+
+            coverModal.classList.add('opacity-0');
+            setTimeout(() => {
+                coverModal.style.display = 'none';
+                mainContent.classList.remove('opacity-0');
+                audioControl.classList.remove('hidden');
+            }, 700);
+
+            playSyntheticMusic();
+        }
+
+        /* Web Audio API Synthesizer (Harmonious ambient wedding music generated in real-time, safe for Vercel/GitHub without 404 broken audio links) */
+        function playSyntheticMusic() {
+            if (isAudioPlaying) return;
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+
+                // Gentle Major Chord Melodic Sequence
+                const notes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23, 392.00, 293.66, 329.63, 392.00, 440.00, 523.25];
+                let noteIndex = 0;
+
+                melodyInterval = setInterval(() => {
+                    if (!isAudioPlaying || !audioCtx) return;
+                    
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(notes[noteIndex % notes.length], audioCtx.currentTime);
+
+                    gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0005, audioCtx.currentTime + 1.5);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 1.5);
+
+                    noteIndex++;
+                }, 450);
+
+                isAudioPlaying = true;
+                document.getElementById('audioIcon').classList.add('animate-spin');
+            } catch (e) {
+                console.log('Audio Context ready');
+            }
+        }
+
+        function toggleAudio() {
+            const icon = document.getElementById('audioIcon');
+            if (isAudioPlaying) {
+                isAudioPlaying = false;
+                if (melodyInterval) clearInterval(melodyInterval);
+                if (audioCtx) audioCtx.suspend();
+                icon.classList.remove('animate-spin');
+                icon.className = 'fas fa-volume-mute';
+            } else {
+                isAudioPlaying = true;
+                if (audioCtx) audioCtx.resume();
+                playSyntheticMusic();
+                icon.className = 'fas fa-music animate-spin';
+            }
+        }
+
+        /* Countdown Timer towards Sunday, 30 Mei 2027 */
+        function startCountdown() {
+            const weddingDate = new Date('May 30, 2027 08:00:00').getTime();
+
+            function update() {
+                const now = new Date().getTime();
+                const distance = weddingDate - now;
+
+                if (distance < 0) {
+                    document.getElementById('countdown').innerHTML = "<p class='text-xs font-bold text-skyTheme-700 col-span-4 py-2'>Acara Sedang / Telah Berlangsung. Mohon Doa Restunya.</p>";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('cd-days').innerText = days < 10 ? '0' + days : days;
+                document.getElementById('cd-hours').innerText = hours < 10 ? '0' + hours : hours;
+                document.getElementById('cd-minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
+                document.getElementById('cd-seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+            }
+
+            update();
+            setInterval(update, 1000);
+        }
+
+        /* Clipboard Copy Utility */
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            showToast('Nomor rekening berhasil disalin!');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+            }, 2500);
+        }
+
+        /* Lightbox Image Preview */
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+            lightboxImg.src = src;
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.add('hidden');
+            lightbox.classList.remove('flex');
+        }
+
+        /* Google Calendar Event Generator */
+        function addToCalendar() {
+            const title = encodeURIComponent("Pernikahan Bagus Ikram, S.Pd & Ayu Vita Tri Rezeki, S.Pd, Gr.");
+            const details = encodeURIComponent("Akad & Resepsi Pernikahan Bagus Ikram, S.Pd & Ayu Vita Tri Rezeki, S.Pd, Gr.");
+            const location = encodeURIComponent("Blok Kedung Belik, RT 027 RW 007, Desa Tegalwangi, Kec Weru, Kab Cirebon");
+            const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=20270530T010000Z/20270530T080000Z&details=${details}&location=${location}`;
+            window.open(calendarUrl, '_blank');
+        }
+
+        /* RSVP Storage & Wishes Guestbook Handler */
+        const defaultWishes = [
+            { name: 'Drs. H. Mulyadi, M.Pd', status: 'Hadir', message: 'Barakallahu lakuma wa baraka alaikuma wa jamaa bainakuma fii khair. Selamat kepada nanda Bagus Ikram & Ayu Vita, semoga menjadi keluarga sakinah mawaddah warahmah.' },
+            { name: 'Siti Aminah, S.Pd', status: 'Hadir', message: 'Selamat menempuh hidup baru untuk rekan sejawat pendidik. Semoga langgeng dan selalu dalam lindungan Allah SWT.' }
+        ];
+
+        function loadWishes() {
+            const saved = localStorage.getItem('wedding_wishes_bagus_ayu_2027');
+            const wishes = saved ? JSON.parse(saved) : defaultWishes;
+            renderWishes(wishes);
+        }
+
+        function renderWishes(wishes) {
+            const container = document.getElementById('wishesList');
+            container.innerHTML = '<p class="text-xs font-semibold text-slate-700 mb-2">Ucapan &amp; Doa Restu:</p>';
+
+            wishes.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'p-3 bg-white rounded-xl border border-skyTheme-100 text-xs shadow-2xs';
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-1">
+                        <strong class="text-slate-800 font-semibold">${escapeHtml(item.name)}</strong>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full ${item.status === 'Hadir' ? 'bg-skyTheme-100 text-skyTheme-800 font-semibold' : 'bg-amber-100 text-amber-800'}">${escapeHtml(item.status)}</span>
+                    </div>
+                    <p class="text-slate-600 italic">"${escapeHtml(item.message)}"</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function submitRSVP(e) {
+            e.preventDefault();
+            const name = document.getElementById('rsvpName').value.trim();
+            const status = document.getElementById('rsvpStatus').value;
+            const message = document.getElementById('rsvpMessage').value.trim();
+
+            if (!name || !message) return;
+
+            const saved = localStorage.getItem('wedding_wishes_bagus_ayu_2027');
+            const wishes = saved ? JSON.parse(saved) : defaultWishes;
+
+            wishes.unshift({ name, status, message });
+            localStorage.setItem('wedding_wishes_bagus_ayu_2027', JSON.stringify(wishes));
+
+            renderWishes(wishes);
+            document.getElementById('rsvpMessage').value = '';
+            showToast('Konfirmasi & ucapan Anda berhasil dikirim!');
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
+        }
+
+        /* Gentle Soft Blue & Light Petals Falling Canvas */
+        function initPetalsCanvas() {
+            const canvas = document.getElementById('petalCanvas');
+            const ctx = canvas.getContext('2d');
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            const petals = Array.from({ length: 28 }, () => ({
+                x: Math.random() * width,
+                y: Math.random() * height - height,
+                size: Math.random() * 7 + 4,
+                speedY: Math.random() * 1.1 + 0.4,
+                speedX: Math.random() * 0.6 - 0.3,
+                angle: Math.random() * 360,
+                spin: Math.random() * 2 - 1
+            }));
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = 'rgba(186, 230, 253, 0.6)';
+
+                petals.forEach(p => {
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    p.angle += p.spin;
+
+                    if (p.y > height) {
+                        p.y = -10;
+                        p.x = Math.random() * width;
+                    }
+
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.angle * Math.PI) / 180);
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, p.size, p.size / 2, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        }
+    </script>
+</body>
+</html>
